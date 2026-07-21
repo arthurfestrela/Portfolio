@@ -1,430 +1,949 @@
 <!DOCTYPE html>
-<html lang="pt-br" class="scroll-smooth">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio | Arthur Estrela</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Arthur Estrela — Full Stack Developer</title>
+    <meta name="description" content="Arthur Estrela — desenvolvedor full stack baseado na Bahia, Brasil. SaaS, interfaces de alta performance e engenharia acelerada por IA.">
+    <meta property="og:title" content="Arthur Estrela — Full Stack Developer">
+    <meta property="og:description" content="SaaS, interfaces de alta performance e engenharia acelerada por IA.">
+    <meta property="og:type" content="website">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:ital,wght@0,400;0,500;0,700;0,900;1,400;1,700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <script>
+        /* Aplica o tema salvo antes do primeiro paint (evita flash) */
+        (function () {
+            try {
+                if (localStorage.getItem('theme') === 'light') {
+                    document.documentElement.classList.add('light');
+                }
+            } catch (e) {}
+        })();
+    </script>
+
     <style>
+        /* ═══════════════════════ TOKENS ═══════════════════════ */
         :root {
-            --bg: #000;
-            --fg: #fff;
-            --fg-muted: rgba(255,255,255,0.4);
-            --border: rgba(255,255,255,0.08);
-            --card-bg: rgba(255,255,255,0.03);
-            --card-hover-bg: rgba(255,255,255,0.07);
-            --card-hover-border: rgba(255,255,255,0.25);
-            --input-border: rgba(255,255,255,0.2);
-            --input-placeholder: rgba(255,255,255,0.35);
-            --pill-border: rgba(255,255,255,0.12);
-            --pill-hover-border: rgba(255,255,255,0.5);
-            --pill-hover-bg: rgba(255,255,255,0.07);
-            --section-bg: #000;
-            --project-bg: #030303;
-            --project-bg2: #111;
-            --tech-label: rgba(255,255,255,0.4);
-            --tech-label-hover: rgba(255,255,255,0.85);
+            --bg:          #0A0A0B;
+            --bg-soft:     #101012;
+            --fg:          #F4F4F0;
+            --muted:       rgba(244, 244, 240, 0.45);
+            --faint:       rgba(244, 244, 240, 0.22);
+            --line:        rgba(244, 244, 240, 0.12);
+            --line-strong: rgba(244, 244, 240, 0.32);
+            --card:        rgba(244, 244, 240, 0.03);
+            --card-hover:  rgba(244, 244, 240, 0.06);
+
+            --accent:      #4169E1;               /* cobalt — texto/acento no dark */
+            --accent-ink:  #ffffff;               /* texto sobre fundo cobalt      */
+            --accent-text: #4169E1;               /* cor de texto de destaque      */
+
+            --font-display: 'Anton', sans-serif;
+            --font-body:    'Archivo', sans-serif;
+            --font-mono:    'JetBrains Mono', monospace;
+
+            --ease-out:  cubic-bezier(0.22, 1, 0.36, 1);
+            --ease-slow: cubic-bezier(0.65, 0, 0.35, 1);
         }
+
         html.light {
-            --bg: #f5f5f5;
-            --fg: #000;
-            --fg-muted: rgba(0,0,0,0.4);
-            --border: rgba(0,0,0,0.1);
-            --card-bg: rgba(0,0,0,0.03);
-            --card-hover-bg: rgba(0,0,0,0.07);
-            --card-hover-border: rgba(0,0,0,0.3);
-            --input-border: rgba(0,0,0,0.25);
-            --input-placeholder: rgba(0,0,0,0.35);
-            --pill-border: rgba(0,0,0,0.15);
-            --pill-hover-border: rgba(0,0,0,0.5);
-            --pill-hover-bg: rgba(0,0,0,0.06);
-            --section-bg: #f5f5f5;
-            --project-bg: #ebebeb;
-            --project-bg2: #e0e0e0;
-            --tech-label: rgba(0,0,0,0.45);
-            --tech-label-hover: rgba(0,0,0,0.85);
+            --bg:          #EFEEE9;
+            --bg-soft:     #E6E5DF;
+            --fg:          #0B0B0C;
+            --muted:       rgba(11, 11, 12, 0.5);
+            --faint:       rgba(11, 11, 12, 0.28);
+            --line:        rgba(11, 11, 12, 0.14);
+            --line-strong: rgba(11, 11, 12, 0.4);
+            --card:        rgba(11, 11, 12, 0.03);
+            --card-hover:  rgba(11, 11, 12, 0.06);
+
+            --accent:      #4169E1;
+            --accent-ink:  #ffffff;
+            --accent-text: #1E3A8A;              /* cobalt escuro legível sobre claro */
         }
+
+        /* ═══════════════════════ BASE ═══════════════════════ */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html { scroll-behavior: smooth; }
 
         body {
-            font-family: 'Inter', sans-serif;
-            overflow-x: hidden;
+            font-family: var(--font-body);
             background: var(--bg);
             color: var(--fg);
-            transition: background 0.4s ease, color 0.4s ease;
+            overflow-x: hidden;
+            transition: background 0.5s ease, color 0.5s ease;
+            -webkit-font-smoothing: antialiased;
         }
-        .text-huge { font-size: clamp(3rem, 15vw, 12rem); }
 
-        /* Theme toggle */
+        ::selection { background: var(--accent); color: var(--accent-ink); }
+
+        a { color: inherit; text-decoration: none; }
+        button { font-family: inherit; }
+        img { display: block; }
+
+        .wrap { max-width: 1440px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 56px); }
+
+        .mono {
+            font-family: var(--font-mono);
+            font-size: 0.68rem;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+        }
+
+        .display {
+            font-family: var(--font-display);
+            font-weight: 400;
+            text-transform: uppercase;
+            line-height: 0.92;
+            letter-spacing: 0.01em;
+        }
+
+        .outline {
+            color: transparent;
+            -webkit-text-stroke: 1.5px var(--fg);
+        }
+
+        /* ═══════════════════════ BOOT ═══════════════════════ */
+        #boot {
+            position: fixed; inset: 0; z-index: 10000;
+            background: var(--bg);
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center; gap: 22px;
+            transition: transform 0.7s var(--ease-slow);
+        }
+        #boot.done { transform: translateY(-100%); }
+        #boot .display { font-size: clamp(2rem, 6vw, 4rem); }
+        #boot .boot-line {
+            width: min(280px, 60vw); height: 2px; background: var(--line);
+            position: relative; overflow: hidden;
+        }
+        #boot .boot-line::after {
+            content: ''; position: absolute; inset: 0;
+            background: var(--accent); transform-origin: left;
+            animation: bootFill 0.9s var(--ease-out) forwards;
+        }
+        @keyframes bootFill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+        #boot .mono { color: var(--muted); }
+
+        /* ═══════════════════════ CURSOR ═══════════════════════ */
+        #cursor-dot, #cursor-ring {
+            position: fixed; top: 0; left: 0; pointer-events: none;
+            border-radius: 50%; z-index: 9999; display: none;
+        }
+        #cursor-dot  { width: 6px;  height: 6px;  background: var(--accent); }
+        #cursor-ring {
+            width: 34px; height: 34px; border: 1px solid var(--line-strong);
+            transition: width 0.25s, height 0.25s, border-color 0.25s, background 0.25s;
+        }
+        #cursor-ring.hovering {
+            width: 58px; height: 58px;
+            border-color: var(--accent); background: rgba(65, 105, 225, 0.12);
+        }
+        @media (pointer: fine) { #cursor-dot, #cursor-ring { display: block; } }
+
+        /* ═══════════════════════ PROGRESSO ═══════════════════════ */
+        #progress {
+            position: fixed; top: 0; left: 0; height: 2px; width: 100%;
+            background: var(--accent); transform-origin: left; transform: scaleX(0);
+            z-index: 200;
+        }
+
+        /* ═══════════════════════ NAV ═══════════════════════ */
+        nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 22px clamp(20px, 4vw, 56px);
+            mix-blend-mode: difference; color: #fff;
+        }
+        nav .logo { display: flex; flex-direction: column; line-height: 1; gap: 4px; }
+        nav .logo .name { font-weight: 900; font-size: 1.05rem; letter-spacing: -0.03em; }
+        nav .logo .sub  { font-family: var(--font-mono); font-size: 0.55rem; letter-spacing: 0.4em; opacity: 0.55; }
+        nav .links { display: flex; gap: clamp(14px, 2.5vw, 34px); align-items: center; }
+        nav .links a {
+            font-family: var(--font-mono); font-size: 0.66rem;
+            letter-spacing: 0.2em; text-transform: uppercase;
+            position: relative; padding: 4px 0; transition: opacity 0.3s;
+        }
+        nav .links a::after {
+            content: ''; position: absolute; left: 0; bottom: 0;
+            width: 100%; height: 1px; background: currentColor;
+            transform: scaleX(0); transform-origin: right;
+            transition: transform 0.35s var(--ease-out);
+        }
+        nav .links a:hover::after { transform: scaleX(1); transform-origin: left; }
+        nav .clock { font-family: var(--font-mono); font-size: 0.66rem; letter-spacing: 0.15em; opacity: 0.6; }
+        @media (max-width: 760px) {
+            nav .clock { display: none; }
+            nav .links { gap: 14px; }
+            nav .links a { font-size: 0.58rem; letter-spacing: 0.12em; }
+        }
+
+        /* ═══════════════════════ TEMA ═══════════════════════ */
         #theme-toggle {
-            position: fixed; bottom: 32px; right: 32px; z-index: 1000;
-            width: 52px; height: 52px; border-radius: 50%;
+            position: fixed; bottom: 28px; right: 28px; z-index: 500;
+            width: 54px; height: 54px; border-radius: 50%;
             background: var(--fg); color: var(--bg);
-            border: none; cursor: pointer; font-size: 1.3rem;
+            border: none; cursor: pointer;
             display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 4px 24px rgba(0,0,0,0.25);
-            transition: background 0.3s, color 0.3s, transform 0.3s;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+            transition: transform 0.35s var(--ease-out), background 0.4s, color 0.4s;
         }
-        #theme-toggle:hover { transform: scale(1.12) rotate(15deg); }
+        #theme-toggle:hover { transform: scale(1.1) rotate(-12deg); }
+        #theme-toggle svg { width: 20px; height: 20px; }
+        #theme-toggle .icon-sun  { display: block; }
+        #theme-toggle .icon-moon { display: none; }
+        html.light #theme-toggle .icon-sun  { display: none; }
+        html.light #theme-toggle .icon-moon { display: block; }
 
-        #about-content {
-            max-height: 0; opacity: 0; overflow: hidden;
-            transition: max-height 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;
+        /* ═══════════════════════ SEÇÕES ═══════════════════════ */
+        section { position: relative; }
+
+        .section-head {
+            display: flex; align-items: baseline; justify-content: space-between;
+            gap: 20px; margin-bottom: clamp(36px, 5vw, 64px);
+            border-bottom: 1px solid var(--line); padding-bottom: 18px;
+        }
+        .section-head .sector { color: var(--accent-text); }
+        .section-head h2 { font-size: clamp(2.4rem, 6vw, 5rem); }
+
+        /* ═══════════════════════ HERO ═══════════════════════ */
+        #hero {
+            min-height: 100svh;
+            display: flex; flex-direction: column; justify-content: flex-end;
+            padding-top: 110px; padding-bottom: 0;
+        }
+        #hero .eyebrow {
+            display: flex; align-items: center; gap: 12px;
+            color: var(--muted); margin-bottom: clamp(20px, 3vh, 36px);
+        }
+        #hero .eyebrow::before {
+            content: ''; width: 34px; height: 1px; background: var(--accent);
+        }
+        #hero h1 { font-size: clamp(4.2rem, 14.5vw, 15rem); }
+        #hero h1 .line { display: block; overflow: hidden; }
+        #hero h1 .line > span {
+            display: inline-block;
+            transform: translateY(110%);
+            transition: transform 1s var(--ease-slow);
+        }
+        body.ready #hero h1 .line > span { transform: translateY(0); }
+        #hero h1 .line:nth-child(2) > span { transition-delay: 0.1s; }
+
+        #hero .hero-foot {
+            display: flex; flex-wrap: wrap; justify-content: space-between;
+            align-items: flex-end; gap: 28px;
+            border-top: 1px solid var(--line);
+            margin-top: clamp(28px, 4vh, 52px); padding: 26px 0 40px;
+        }
+        #hero .hero-foot p { max-width: 460px; font-size: 1.05rem; line-height: 1.5; color: var(--muted); }
+        #hero .hero-foot p strong { color: var(--fg); font-weight: 700; }
+
+        .cta {
+            display: inline-flex; align-items: center; gap: 14px;
+            font-family: var(--font-mono); font-size: 0.72rem;
+            letter-spacing: 0.25em; text-transform: uppercase;
+            padding: 18px 30px; border: 1px solid var(--line-strong);
+            border-radius: 999px; position: relative; overflow: hidden;
+            transition: color 0.35s var(--ease-out), border-color 0.35s;
+            white-space: nowrap;
+        }
+        .cta::before {
+            content: ''; position: absolute; inset: 0; background: var(--accent);
+            transform: translateY(101%); transition: transform 0.4s var(--ease-out);
+            z-index: 0;
+        }
+        .cta:hover::before { transform: translateY(0); }
+        .cta:hover { color: var(--accent-ink); border-color: var(--accent); }
+        .cta span, .cta svg { position: relative; z-index: 1; }
+        .cta svg { width: 14px; height: 14px; transition: transform 0.35s var(--ease-out); }
+        .cta:hover svg { transform: translateX(5px); }
+
+        .hero-data {
+            display: grid; grid-template-columns: repeat(3, 1fr);
+            border-top: 1px solid var(--line);
+        }
+        .hero-data .cell {
+            padding: 18px 0; display: flex; flex-direction: column; gap: 6px;
+            border-right: 1px solid var(--line);
+        }
+        .hero-data .cell:last-child { border-right: none; }
+        .hero-data .cell:not(:first-child) { padding-left: 24px; }
+        .hero-data .label { color: var(--faint); }
+        .hero-data .value { font-family: var(--font-mono); font-size: 0.8rem; letter-spacing: 0.08em; }
+        .hero-data .value.live { color: var(--accent-text); }
+        @media (max-width: 700px) {
+            .hero-data { grid-template-columns: 1fr; }
+            .hero-data .cell { border-right: none; border-bottom: 1px solid var(--line); }
+            .hero-data .cell:not(:first-child) { padding-left: 0; }
+            .hero-data .cell:last-child { border-bottom: none; }
         }
 
-        .lang-ticker-wrapper {
-            overflow: hidden;
-            mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
-            -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+        /* ═══════════════════════ MARQUEE COBALT ═══════════════════════ */
+        .band {
+            background: var(--accent); color: var(--accent-ink);
+            overflow: hidden; padding: 14px 0;
+            transform: rotate(-1.2deg) scale(1.02);
+            border-top: 1px solid var(--accent-ink);
+            border-bottom: 1px solid var(--accent-ink);
         }
-        .lang-ticker-track { display: flex; gap: 0; width: max-content; animation: ticker 28s linear infinite; }
-        .lang-ticker-track:hover { animation-play-state: paused; }
-        @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-        .lang-pill {
-            display: inline-flex; align-items: center; gap: 8px;
-            padding: 10px 24px; margin: 0 8px;
-            border: 1px solid var(--pill-border); border-radius: 999px;
-            font-size: 0.8rem; font-weight: 700; letter-spacing: 0.12em;
-            text-transform: uppercase; white-space: nowrap; color: var(--fg);
-            transition: border-color 0.3s, background 0.3s; cursor: default;
+        .band-track {
+            display: flex; width: max-content;
+            animation: marquee 22s linear infinite;
         }
-        .lang-pill:hover { border-color: var(--pill-hover-border); background: var(--pill-hover-bg); }
-        .lang-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+        .band-track span {
+            font-family: var(--font-display); text-transform: uppercase;
+            font-size: 1.4rem; letter-spacing: 0.06em; white-space: nowrap;
+            padding-right: 18px;
+        }
+        .band-track span i { font-style: normal; opacity: 0.35; padding-right: 18px; }
+        @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
-        .tech-track-wrapper {
-            overflow: hidden;
-            mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
-            -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+        /* ═══════════════════════ PROJETOS ═══════════════════════ */
+        #work { padding: clamp(90px, 12vh, 150px) 0 40px; }
+
+        .projects { display: grid; grid-template-columns: repeat(12, 1fr); gap: 18px; perspective: 1400px; }
+
+        .project {
+            position: relative; overflow: hidden; display: block;
+            border: 1px solid var(--line); border-radius: 22px;
+            background: var(--card); padding: clamp(24px, 3vw, 40px);
+            min-height: 380px;
+            display: flex; flex-direction: column; justify-content: space-between;
+            transition: border-color 0.4s, background 0.4s, transform 0.5s var(--ease-out);
         }
-        .tech-track { display: flex; align-items: center; width: max-content; animation: techScroll 32s linear infinite; }
-        .tech-track:hover { animation-play-state: paused; }
-        .tech-track-reverse { animation-direction: reverse; animation-duration: 38s; }
-        @keyframes techScroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        .project:hover { border-color: var(--line-strong); background: var(--card-hover); transform: translateY(-6px); }
+
+        /* sheen sweep */
+        .project::after {
+            content: ''; position: absolute; top: 0; left: -80%;
+            width: 55%; height: 100%;
+            background: linear-gradient(105deg, transparent, rgba(65, 105, 225, 0.07), transparent);
+            transform: skewX(-18deg); transition: left 0.8s var(--ease-out);
+            pointer-events: none;
+        }
+        .project:hover::after { left: 130%; }
+
+        .project .glyph {
+            position: absolute; right: -10px; bottom: -50px;
+            font-family: var(--font-display); text-transform: uppercase;
+            font-size: clamp(9rem, 16vw, 15rem); line-height: 1;
+            color: transparent; -webkit-text-stroke: 1px var(--faint);
+            opacity: 0.5; pointer-events: none; user-select: none;
+            transition: opacity 0.5s, transform 0.7s var(--ease-out);
+        }
+        .project:hover .glyph { opacity: 0.9; transform: translateY(-10px); }
+
+        .project .top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; position: relative; z-index: 1; }
+        .project .idx { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.2em; color: var(--faint); }
+        .project .badges { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+        .project .badge {
+            font-family: var(--font-mono); font-size: 0.58rem; letter-spacing: 0.18em;
+            text-transform: uppercase; padding: 6px 12px;
+            border: 1px solid var(--line); border-radius: 999px; color: var(--muted);
+        }
+        .project .badge.hot { border-color: var(--accent); color: var(--accent-text); }
+
+        .project .bottom { position: relative; z-index: 1; }
+        .project h3 { font-family: var(--font-display); font-size: clamp(1.9rem, 3.4vw, 3rem); text-transform: uppercase; margin-bottom: 10px; }
+        .project .desc { color: var(--muted); font-size: 0.95rem; line-height: 1.55; max-width: 480px; margin-bottom: 18px; }
+        .project .stack { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 20px; }
+        .project .chip {
+            font-family: var(--font-mono); font-size: 0.58rem; letter-spacing: 0.14em;
+            text-transform: uppercase; padding: 5px 11px;
+            background: var(--card-hover); border-radius: 4px; color: var(--muted);
+        }
+        .project .links { display: flex; gap: 22px; }
+        .project .link {
+            font-family: var(--font-mono); font-size: 0.64rem; letter-spacing: 0.22em;
+            text-transform: uppercase; display: inline-flex; align-items: center; gap: 8px;
+            color: var(--fg);
+        }
+        .project .link svg { width: 12px; height: 12px; transition: transform 0.3s var(--ease-out); }
+        .project .link:hover svg { transform: translate(3px, -3px); }
+        .project .link.soft { color: var(--faint); }
+
+        .span-7 { grid-column: span 7; }
+        .span-5 { grid-column: span 5; }
+        @media (max-width: 900px) { .span-7, .span-5 { grid-column: span 12; } .project { min-height: 320px; } }
+
+        /* ═══════════════════════ TECH ═══════════════════════ */
+        #tech { padding: clamp(90px, 12vh, 150px) 0; }
+        .tech-rail {
+            overflow: hidden; margin-bottom: 16px;
+            mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+            -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+        }
+        .tech-track { display: flex; width: max-content; animation: marquee 34s linear infinite; }
+        .tech-track.reverse { animation-direction: reverse; animation-duration: 40s; }
+        .tech-rail:hover .tech-track { animation-play-state: paused; }
         .tech-card {
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            gap: 12px; width: 130px; height: 120px; margin: 0 10px;
-            border: 1px solid var(--border); border-radius: 20px;
-            background: var(--card-bg); flex-shrink: 0;
-            transition: border-color 0.3s, background 0.3s, transform 0.3s; cursor: default;
+            gap: 12px; width: 138px; height: 126px; margin: 0 9px; flex-shrink: 0;
+            border: 1px solid var(--line); border-radius: 16px; background: var(--card);
+            transition: border-color 0.3s, background 0.3s, transform 0.3s;
         }
-        .tech-card:hover { border-color: var(--card-hover-border); background: var(--card-hover-bg); transform: translateY(-4px); }
-        .tech-card img { width: 44px; height: 44px; object-fit: contain; filter: brightness(0.9) saturate(0.8); transition: filter 0.3s; }
-        .tech-card:hover img { filter: brightness(1) saturate(1); }
-        .tech-card span { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--tech-label); transition: color 0.3s; }
-        .tech-card:hover span { color: var(--tech-label-hover); }
-
-        .reveal { opacity: 0; transform: translateY(32px); transition: opacity 0.8s ease, transform 0.8s ease; }
-        .reveal.visible { opacity: 1; transform: translateY(0); }
-
-        .status-dot {
-            width: 10px; height: 10px; background: #22c55e; border-radius: 50%; flex-shrink: 0;
-            box-shadow: 0 0 0 0 rgba(34,197,94,0.6); animation: ping 2s ease-in-out infinite;
-        }
-        @keyframes ping {
-            0%   { box-shadow: 0 0 0 0    rgba(34,197,94,0.6); }
-            60%  { box-shadow: 0 0 0 10px rgba(34,197,94,0);   }
-            100% { box-shadow: 0 0 0 0    rgba(34,197,94,0);   }
+        .tech-card:hover { border-color: var(--accent); background: var(--card-hover); transform: translateY(-5px); }
+        .tech-card img { width: 42px; height: 42px; object-fit: contain; filter: grayscale(0.55); transition: filter 0.3s; }
+        .tech-card:hover img { filter: grayscale(0); }
+        .tech-card span {
+            font-family: var(--font-mono); font-size: 0.58rem;
+            letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted);
         }
 
-        .contact-input {
-            background: transparent; border: none;
-            border-bottom: 1px solid var(--input-border);
-            color: var(--fg); font-family: 'Inter', sans-serif; font-size: 1rem;
-            padding: 14px 0; width: 100%; outline: none; transition: border-color 0.3s;
+        /* ═══════════════════════ IA ═══════════════════════ */
+        #ai { padding: clamp(90px, 12vh, 150px) 0; }
+        #ai .lead {
+            font-size: clamp(1.25rem, 2.4vw, 1.8rem); line-height: 1.45;
+            max-width: 900px; margin-bottom: clamp(40px, 6vh, 70px); font-weight: 500;
         }
-        .contact-input::placeholder { color: var(--input-placeholder); }
-        .contact-input:focus { border-bottom-color: var(--fg); }
-        textarea.contact-input { resize: none; min-height: 100px; }
+        #ai .lead em { font-style: normal; color: var(--accent-text); }
+
+        .ai-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+        .ai-card {
+            border: 1px solid var(--line); border-radius: 22px;
+            background: var(--card); padding: 30px;
+            display: flex; flex-direction: column; gap: 16px;
+            transition: border-color 0.4s, background 0.4s, transform 0.5s var(--ease-out);
+        }
+        .ai-card:hover { border-color: var(--line-strong); background: var(--card-hover); transform: translateY(-6px); }
+        .ai-card .num {
+            font-family: var(--font-mono); font-size: 0.68rem;
+            letter-spacing: 0.25em; color: var(--accent-text);
+        }
+        .ai-card h3 { font-family: var(--font-display); font-size: 1.5rem; text-transform: uppercase; }
+        .ai-card p { color: var(--muted); font-size: 0.94rem; line-height: 1.6; }
+        .ai-card .term {
+            margin-top: auto; font-family: var(--font-mono); font-size: 0.66rem;
+            color: var(--faint); border-top: 1px dashed var(--line); padding-top: 14px;
+        }
+        .ai-card .term b { color: var(--accent-text); font-weight: 500; }
+        @media (max-width: 900px) { .ai-grid { grid-template-columns: 1fr; } }
+
+        /* ═══════════════════════ SOBRE ═══════════════════════ */
+        #about { padding: clamp(90px, 12vh, 150px) 0; }
+        .about-grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: clamp(30px, 5vw, 80px); margin-bottom: clamp(50px, 7vh, 90px); }
+        .about-grid .statement { font-size: clamp(1.5rem, 3vw, 2.4rem); line-height: 1.25; font-weight: 700; letter-spacing: -0.01em; }
+        .about-grid .statement span { color: var(--muted); }
+        .about-facts { display: flex; flex-direction: column; }
+        .about-facts .fact {
+            display: flex; justify-content: space-between; gap: 16px;
+            padding: 16px 0; border-bottom: 1px solid var(--line);
+        }
+        .about-facts .fact:first-child { border-top: 1px solid var(--line); }
+        .about-facts .k { color: var(--faint); }
+        .about-facts .v { font-family: var(--font-mono); font-size: 0.76rem; letter-spacing: 0.08em; text-align: right; }
+        @media (max-width: 900px) { .about-grid { grid-template-columns: 1fr; } }
+
+        .pill-rail {
+            overflow: hidden;
+            mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+            -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+        }
+        .pill-track { display: flex; width: max-content; animation: marquee 28s linear infinite; }
+        .pill-rail:hover .pill-track { animation-play-state: paused; }
+        .pill {
+            display: inline-flex; align-items: center; gap: 9px;
+            padding: 11px 24px; margin: 0 7px;
+            border: 1px solid var(--line); border-radius: 999px;
+            font-family: var(--font-mono); font-size: 0.64rem; font-weight: 500;
+            letter-spacing: 0.18em; text-transform: uppercase; white-space: nowrap;
+            transition: border-color 0.3s;
+        }
+        .pill:hover { border-color: var(--line-strong); }
+        .pill i { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+
+        /* ═══════════════════════ CERTIFICADOS ═══════════════════════ */
+        #certs { padding: clamp(90px, 12vh, 150px) 0; }
+        .certs-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+        .cert {
+            border: 1px solid var(--line); border-radius: 22px; background: var(--card);
+            padding: 30px; display: flex; flex-direction: column; gap: 18px;
+            transition: border-color 0.4s, background 0.4s, transform 0.5s var(--ease-out);
+        }
+        .cert:hover { border-color: var(--line-strong); background: var(--card-hover); transform: translateY(-6px); }
+        .cert .langs { display: flex; gap: 8px; flex-wrap: wrap; }
+        .cert .lang-tag {
+            font-family: var(--font-mono); font-size: 0.6rem; font-weight: 700;
+            letter-spacing: 0.1em; padding: 5px 10px; border-radius: 4px;
+            background: var(--card-hover); border: 1px solid var(--line);
+        }
+        .cert h3 { font-family: var(--font-display); font-size: 1.35rem; text-transform: uppercase; line-height: 1.1; }
+        .cert .meta { color: var(--muted); font-size: 0.85rem; }
+        .cert .meta b { color: var(--fg); font-weight: 700; }
+        .cert .bar-row { display: flex; justify-content: space-between; margin-bottom: 8px; }
+        .cert .bar-row .pct { font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent-text); }
+        .cert .bar { height: 3px; border-radius: 99px; background: var(--line); overflow: hidden; }
+        .cert .bar i { display: block; height: 100%; width: 0; background: var(--accent); transition: width 1.2s var(--ease-slow) 0.3s; border-radius: 99px; }
+        .cert.visible .bar i { width: 100%; }
+        .cert .tags { display: flex; flex-wrap: wrap; gap: 7px; margin-top: auto; }
+        .cert .tag {
+            font-family: var(--font-mono); font-size: 0.56rem; letter-spacing: 0.16em;
+            text-transform: uppercase; padding: 5px 12px;
+            border: 1px solid var(--line); border-radius: 999px; color: var(--muted);
+        }
+        .cert.slot {
+            align-items: center; justify-content: center; gap: 14px;
+            border-style: dashed; background: transparent; min-height: 300px;
+        }
+        .cert.slot .plus { font-family: var(--font-display); font-size: 2.6rem; color: var(--faint); }
+        .cert.slot p { color: var(--faint); }
+        @media (max-width: 900px) { .certs-grid { grid-template-columns: 1fr; } }
+
+        /* ═══════════════════════ CONTATO ═══════════════════════ */
+        #contact { padding: clamp(90px, 12vh, 150px) 0 0; border-top: 1px solid var(--line); }
+        .status { display: inline-flex; align-items: center; gap: 12px; margin-bottom: 30px; }
+        .status .dot {
+            width: 9px; height: 9px; border-radius: 50%; background: var(--accent);
+            box-shadow: 0 0 0 0 rgba(65, 105, 225, 0.55);
+            animation: pulse 2.2s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(65, 105, 225, 0.55); }
+            65% { box-shadow: 0 0 0 12px rgba(65, 105, 225, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(65, 105, 225, 0); }
+        }
+        .status span { color: var(--accent-text); }
+
+        #contact h2.giant { font-size: clamp(3rem, 10vw, 9rem); margin-bottom: clamp(40px, 7vh, 80px); }
+        #contact h2.giant .alt { color: transparent; -webkit-text-stroke: 1.5px var(--fg); }
+
+        .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(36px, 6vw, 100px); padding-bottom: clamp(70px, 9vh, 120px); }
+        @media (max-width: 900px) { .contact-grid { grid-template-columns: 1fr; } }
+
+        .contact-info p { color: var(--muted); font-size: 1.02rem; line-height: 1.6; margin-bottom: 28px; max-width: 420px; }
+        .email-link {
+            display: inline-block; font-size: clamp(1.15rem, 2.2vw, 1.6rem); font-weight: 700;
+            border-bottom: 2px solid var(--accent); padding-bottom: 4px;
+            transition: color 0.3s, border-color 0.3s;
+            margin-bottom: 36px; word-break: break-all;
+        }
+        .email-link:hover { color: var(--accent-text); }
+        .socials { display: flex; gap: 26px; }
+        .socials a {
+            font-family: var(--font-mono); font-size: 0.66rem; letter-spacing: 0.24em;
+            text-transform: uppercase; color: var(--muted); position: relative;
+            padding-bottom: 3px; transition: color 0.3s;
+        }
+        .socials a::after {
+            content: ''; position: absolute; left: 0; bottom: 0; height: 1px; width: 100%;
+            background: var(--accent); transform: scaleX(0); transform-origin: right;
+            transition: transform 0.35s var(--ease-out);
+        }
+        .socials a:hover { color: var(--fg); }
+        .socials a:hover::after { transform: scaleX(1); transform-origin: left; }
+
+        .field { position: relative; margin-bottom: 34px; }
+        .field input, .field textarea {
+            width: 100%; background: transparent; border: none;
+            border-bottom: 1px solid var(--line-strong);
+            padding: 14px 0; color: var(--fg);
+            font-family: var(--font-body); font-size: 1rem; outline: none;
+            transition: border-color 0.3s;
+        }
+        .field textarea { resize: none; min-height: 110px; }
+        .field label {
+            position: absolute; left: 0; top: 14px; color: var(--faint);
+            pointer-events: none; transition: all 0.3s var(--ease-out);
+            font-size: 1rem;
+        }
+        .field input:focus, .field textarea:focus { border-color: var(--accent); }
+        .field input:focus + label, .field input:not(:placeholder-shown) + label,
+        .field textarea:focus + label, .field textarea:not(:placeholder-shown) + label {
+            top: -12px; font-size: 0.62rem; font-family: var(--font-mono);
+            letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent-text);
+        }
 
         .send-btn {
-            background: var(--fg); color: var(--bg); font-weight: 900; letter-spacing: 0.1em;
-            text-transform: uppercase; padding: 18px 48px; border: none; cursor: pointer;
-            font-size: 0.85rem; transition: opacity 0.3s;
+            display: inline-flex; align-items: center; gap: 14px;
+            background: var(--fg); color: var(--bg); border: 1px solid var(--fg);
+            font-family: var(--font-mono); font-size: 0.72rem; font-weight: 700;
+            letter-spacing: 0.25em; text-transform: uppercase;
+            padding: 20px 42px; border-radius: 999px; cursor: pointer;
+            position: relative; overflow: hidden;
+            transition: color 0.35s var(--ease-out), border-color 0.35s;
         }
-        .send-btn:hover    { opacity: 0.75; }
+        .send-btn::before {
+            content: ''; position: absolute; inset: 0; background: var(--accent);
+            transform: translateY(101%); transition: transform 0.4s var(--ease-out);
+        }
+        .send-btn:hover::before { transform: translateY(0); }
+        .send-btn:hover { color: var(--accent-ink); border-color: var(--accent); }
+        .send-btn span { position: relative; z-index: 1; }
         .send-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        #form-feedback { margin-top: 18px; font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.12em; color: var(--accent-text); display: none; }
+        #form-feedback.show { display: block; }
 
-        #cursor {
-            position: fixed; width: 16px; height: 16px; background: var(--fg); border-radius: 50%;
-            pointer-events: none; z-index: 9999; transition: transform 0.15s ease; display: none;
+        .footer-bottom {
+            border-top: 1px solid var(--line);
+            display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
+            gap: 14px; padding: 26px 0 40px;
         }
-        @media (pointer: fine) { #cursor { display: block; } }
+        .footer-bottom .mono { color: var(--faint); }
+        .footer-bottom a.top { color: var(--muted); transition: color 0.3s; }
+        .footer-bottom a.top:hover { color: var(--accent-text); }
 
-        /* Dynamic text colors using CSS vars */
-        .dyn-muted    { color: var(--fg-muted); }
-        .dyn-border   { border-color: var(--border); }
-        .dyn-bg       { background: var(--bg); }
-        .dyn-card-bg  { background: var(--project-bg); border-color: var(--border); }
-        .dyn-card-bg2 { background: var(--project-bg2); }
+        /* ═══════════════════════ REVEAL ═══════════════════════ */
+        .reveal {
+            opacity: 0; transform: translateY(42px);
+            transition: opacity 0.9s var(--ease-out), transform 0.9s var(--ease-out);
+            transition-delay: var(--d, 0s);
+        }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
 
-        /* Certificate section */
-        .cert-card {
-            border: 1px solid var(--border); border-radius: 24px;
-            background: var(--card-bg); overflow: hidden;
-            transition: border-color 0.3s, transform 0.3s, background 0.3s;
+        /* ═══════════════════════ MOVIMENTO REDUZIDO ═══════════════════════ */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+            html { scroll-behavior: auto; }
+            .reveal { opacity: 1; transform: none; }
+            #hero h1 .line > span { transform: none; }
+            #boot { display: none; }
         }
-        .cert-card:hover { border-color: var(--card-hover-border); background: var(--card-hover-bg); transform: translateY(-4px); }
-        .cert-badge {
-            display: inline-flex; align-items: center; gap: 6px;
-            padding: 5px 14px; border-radius: 999px;
-            border: 1px solid var(--border); font-size: 0.68rem;
-            font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
-            color: var(--fg-muted);
-        }
-        .cert-stars { color: #f59e0b; letter-spacing: 2px; font-size: 0.9rem; }
     </style>
 </head>
-<body class="selection:bg-white selection:text-black">
+<body>
 
-    <div id="cursor"></div>
+    <!-- Boot -->
+    <div id="boot" aria-hidden="true">
+        <div class="display">ARTHUR ESTRELA</div>
+        <div class="boot-line"></div>
+        <div class="mono">Portfólio — 2026</div>
+    </div>
 
-    <!-- Theme Toggle -->
-    <button id="theme-toggle" title="Alternar tema" aria-label="Alternar entre tema claro e escuro">
-        <span id="theme-icon">☀️</span>
-    </button>
+    <div id="cursor-dot"></div>
+    <div id="cursor-ring"></div>
+    <div id="progress"></div>
 
     <!-- Nav -->
-    <nav class="fixed top-0 w-full z-50 mix-blend-difference px-6 py-8 flex justify-between items-center text-white">
-        <div class="flex flex-col leading-none gap-[3px]">
-            <span class="font-bold text-xl tracking-tighter">ARTHUR.E</span>
-            <div class="flex items-center gap-2">
-                <span style="font-family:'Georgia',serif;font-size:15px;font-weight:700;letter-spacing:-1px;">AE</span>
-                <span style="width:1px;height:10px;background:currentColor;opacity:0.3;display:inline-block;"></span>
-                <span style="font-family:'Georgia',serif;font-size:7px;letter-spacing:3px;opacity:0.6;text-transform:uppercase;">ESTRELA</span>
-            </div>
-        </div>
-        <div class="space-x-6 text-sm font-medium uppercase tracking-widest">
-            <a href="#work"    class="hover:opacity-50 transition">Work</a>
-            <a href="#tech"    class="hover:opacity-50 transition">Tech</a>
-            <a href="#about"   class="hover:opacity-50 transition">About</a>
-            <a href="#certs"   class="hover:opacity-50 transition">Certs</a>
-            <a href="#contact" class="hover:opacity-50 transition">Contact</a>
+    <nav>
+        <a href="#hero" class="logo" aria-label="Início">
+            <span class="name">ARTHUR.E</span>
+            <span class="sub">ESTRELA — DEV</span>
+        </a>
+        <div class="links">
+            <a href="#work">Projetos</a>
+            <a href="#tech">Stack</a>
+            <a href="#ai">IA</a>
+            <a href="#about">Sobre</a>
+            <a href="#contact">Contato</a>
+            <span class="clock" id="nav-clock">--:--:--</span>
         </div>
     </nav>
 
-    <!-- Hero -->
-    <section class="min-h-screen flex flex-col justify-center px-6 pt-20">
-        <div class="max-w-[1400px] mx-auto w-full">
-            <p class="text-sm uppercase tracking-[0.3em] mb-4 font-medium dyn-muted">Arthur Estrela — Independent Developer</p>
-            <h1 class="text-huge font-black leading-[0.8] tracking-tighter mb-12">
-                DIGITAL <br><span class="dyn-muted">DEVELOPER</span>
-            </h1>
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-end border-t pt-8 dyn-border">
-                <p class="max-w-md text-lg leading-tight mb-6 md:mb-0 dyn-muted">
-                    Desenvolvedor full stack especializado em criar experiências digitais minimalistas e funcionais que conectam marcas e usuários de forma eficaz.
-                </p>
-                <a href="#work" class="group flex items-center gap-2 text-2xl font-bold italic underline decoration-2 underline-offset-8">
-                    Ver Projetos <span class="group-hover:translate-x-2 transition-transform">→</span>
-                </a>
-            </div>
-        </div>
-    </section>
+    <!-- Tema -->
+    <button id="theme-toggle" title="Alternar tema" aria-label="Alternar entre tema claro e escuro">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <circle cx="12" cy="12" r="4"/>
+            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+        </svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+    </button>
 
-    <!-- Work -->
-    <section id="work" class="px-6 py-32 max-w-[1400px] mx-auto border-t dyn-border">
-        <p class="text-xs uppercase tracking-[0.3em] mb-10 font-medium dyn-muted">Projetos</p>
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
-
-            <a href="https://github.com/arthurfestrela/Projeto-AluguelIates" target="_blank"
-               class="md:col-span-8 group overflow-hidden rounded-[2.5rem] aspect-video relative cursor-pointer block dyn-card-bg border">
-                <div class="absolute inset-0 flex items-center justify-center select-none pointer-events-none">
-                    <span class="text-[10rem] opacity-[0.05] group-hover:opacity-[0.09] transition duration-700 group-hover:scale-110">&#x26F5;</span>
-                </div>
-                <div class="absolute top-6 right-6 px-3 py-1 rounded-full border text-[10px] font-bold uppercase tracking-widest dyn-muted dyn-border">Destaque</div>
-                <div class="absolute bottom-8 left-8 right-8">
-                    <div class="flex items-center gap-3 mb-2">
-                        <span class="text-2xl">&#x26F5;</span>
-                        <h3 class="text-3xl font-bold tracking-tighter italic">Aluguel de Iates</h3>
-                    </div>
-                    <p class="text-sm leading-snug mb-3 dyn-muted">Plataforma de aluguel de iates — UI/UX e desenvolvimento web.</p>
-                    <span class="text-[10px] font-bold uppercase tracking-[0.2em] dyn-muted group-hover:opacity-80 transition flex items-center gap-1">
-                        Ver no GitHub <span class="group-hover:translate-x-1 transition-transform inline-block">→</span>
-                    </span>
-                </div>
-            </a>
-
-            <a href="https://github.com/raulcabralc/sensei-java" target="_blank"
-               class="md:col-span-4 group overflow-hidden rounded-[2.5rem] aspect-square relative cursor-pointer block dyn-card-bg border">
-                <div class="absolute inset-0 flex items-center justify-center select-none pointer-events-none">
-                    <span class="text-[7rem] opacity-[0.06] group-hover:opacity-[0.1] transition duration-700 group-hover:scale-110">&#x1F94B;</span>
-                </div>
-                <div class="absolute top-6 right-6 px-3 py-1 rounded-full border text-[10px] font-bold uppercase tracking-widest dyn-muted dyn-border">Java</div>
-                <div class="absolute bottom-8 left-8 right-8">
-                    <div class="flex items-center gap-2 mb-2">
-                        <span class="text-xl">&#x1F94B;</span>
-                        <h3 class="text-2xl font-bold tracking-tighter italic">Sensei</h3>
-                    </div>
-                    <p class="text-sm leading-snug mb-3 dyn-muted">Sistema full stack em Java com lógica orientada a objetos.</p>
-                    <span class="text-[10px] font-bold uppercase tracking-[0.2em] dyn-muted group-hover:opacity-80 transition flex items-center gap-1">
-                        Ver no GitHub <span class="group-hover:translate-x-1 transition-transform inline-block">→</span>
-                    </span>
-                </div>
-            </a>
-
-            <div class="md:col-span-12 group overflow-hidden rounded-[2.5rem] relative cursor-pointer dyn-card-bg2" style="height:200px;">
-                <div class="absolute inset-0 flex items-center justify-center opacity-10 group-hover:opacity-20 transition duration-700 font-black" style="font-size:8rem;line-height:1;">03</div>
-                <div class="absolute bottom-8 left-8 flex justify-between items-end w-full pr-8">
-                    <div>
-                        <h3 class="text-2xl font-bold tracking-tighter italic">Sistema Full Stack</h3>
-                        <p class="text-sm dyn-muted">Python & React</p>
-                    </div>
-                    <span class="text-xs font-bold uppercase tracking-widest dyn-muted">Em breve</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Tecnologias -->
-    <section id="tech" class="py-32 border-t dyn-border">
-        <div class="max-w-[1400px] mx-auto px-6 mb-14">
-            <p class="text-xs uppercase tracking-[0.3em] mb-3 font-medium dyn-muted">Stack</p>
-            <h2 class="text-5xl md:text-7xl font-black tracking-tighter italic">TECNOLOGIAS</h2>
-        </div>
-
-        <div class="tech-track-wrapper mb-4">
-            <div class="tech-track" id="tech-row-1"></div>
-        </div>
-        <div class="tech-track-wrapper">
-            <div class="tech-track tech-track-reverse" id="tech-row-2"></div>
-        </div>
-    </section>
-
-    <!-- About -->
-    <section id="about" class="px-6 py-20 max-w-[1400px] mx-auto border-t dyn-border">
-        <div onclick="toggleAbout()" class="cursor-pointer group">
-            <div class="flex justify-between items-center">
-                <h2 class="text-5xl md:text-7xl font-bold tracking-tighter italic group-hover:opacity-50 transition">
-                    SOBRE <span class="text-sm align-top ml-2 font-normal not-italic dyn-muted">(clique)</span>
-                </h2>
-                <span id="about-icon" class="text-4xl transition-transform duration-300 select-none">+</span>
-            </div>
-        </div>
-        <div id="about-content">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 pt-12 pb-16">
-                <p class="text-2xl leading-tight">
-                    Olá, me chamo Arthur Estrela e sou um desenvolvedor focado em criar soluções digitais que unem estética e performance técnica.
-                </p>
-                <div class="space-y-4 dyn-muted">
-                    <p>Baseado na Bahia, Brasil.</p>
-                    <p>Especializado em desenvolvimento web, front-end, branding e back-end.</p>
-                    <p>Trabalhando atualmente como freelancer para clientes ao redor do mundo.</p>
-                </div>
-            </div>
-            <div class="border-t pt-10 dyn-border">
-                <p class="text-xs uppercase tracking-[0.3em] mb-6 font-medium dyn-muted">Stack técnica</p>
-                <div class="lang-ticker-wrapper">
-                    <div class="lang-ticker-track" id="lang-track"></div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Certificates -->
-    <section id="certs" class="px-6 py-32 max-w-[1400px] mx-auto border-t dyn-border">
-        <p class="text-xs uppercase tracking-[0.3em] mb-3 font-medium dyn-muted">Formação</p>
-        <h2 class="text-5xl md:text-7xl font-black tracking-tighter italic mb-14">CERTIFICADOS</h2>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-
-            <!-- Certificate 1 — Lógica de Programação -->
-            <div class="cert-card p-8 flex flex-col gap-6 reveal">
-                <!-- Icon row -->
-                <div class="flex items-center gap-3">
-                    <span class="text-3xl">🐍</span>
-                    <span class="text-3xl">☕</span>
-                    <span class="text-2xl font-black tracking-tighter" style="color:#f34b7d;">C C++</span>
-                    <span class="text-2xl font-black tracking-tighter" style="color:#00758f;">C#</span>
-                </div>
-
-                <!-- Title -->
-                <div>
-                    <h3 class="text-xl font-black tracking-tighter leading-tight mb-1">
-                        Algoritmos e Lógica de Programação
-                    </h3>
-                    <p class="text-sm font-bold dyn-muted">O Curso COMPLETO</p>
-                </div>
-
-                <!-- Meta -->
-                <div class="flex flex-col gap-2">
-                    <div class="flex items-center gap-2">
-                        <span class="text-xs dyn-muted uppercase tracking-widest font-bold">Instrutor:</span>
-                        <span class="text-sm font-bold">Nelio Alves</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <span class="cert-stars">★★★★★</span>
-                        <span class="text-xs font-bold dyn-muted">Sua classificação</span>
-                    </div>
-                </div>
-
-                <!-- Progress -->
-                <div>
-                    <div class="flex justify-between mb-2">
-                        <span class="text-xs font-bold uppercase tracking-widest dyn-muted">Conclusão</span>
-                        <span class="text-xs font-black text-green-400">100%</span>
-                    </div>
-                    <div class="w-full h-1.5 rounded-full" style="background: var(--border);">
-                        <div class="h-1.5 rounded-full bg-green-400" style="width:100%;"></div>
-                    </div>
-                </div>
-
-                <!-- Tags -->
-                <div class="flex flex-wrap gap-2">
-                    <span class="cert-badge">Lógica</span>
-                    <span class="cert-badge">Algoritmos</span>
-                    <span class="cert-badge">Python</span>
-                    <span class="cert-badge">Java</span>
-                    <span class="cert-badge">C++</span>
-                </div>
-            </div>
-
-            <!-- Placeholder 2 -->
-            <div class="cert-card p-8 flex flex-col justify-center items-center gap-4 opacity-40 reveal" style="min-height:280px;">
-                <span class="text-5xl">+</span>
-                <p class="text-xs font-bold uppercase tracking-widest dyn-muted text-center">Em breve</p>
-            </div>
-
-            <!-- Placeholder 3 -->
-            <div class="cert-card p-8 flex flex-col justify-center items-center gap-4 opacity-40 reveal" style="min-height:280px;">
-                <span class="text-5xl">+</span>
-                <p class="text-xs font-bold uppercase tracking-widest dyn-muted text-center">Em breve</p>
-            </div>
-
-        </div>
-    </section>
-
-    <!-- Contact -->
-    <footer id="contact" class="px-6 py-24 border-t dyn-border dyn-bg">
-        <div class="max-w-[1400px] mx-auto">
-            <div class="flex items-center gap-3 mb-10">
-                <div class="status-dot"></div>
-                <span class="text-xs font-bold uppercase tracking-[0.25em] text-green-400">Disponível para projetos</span>
-            </div>
-            <h2 class="text-5xl md:text-8xl font-black tracking-tighter italic leading-none mb-16">VAMOS CRIAR<br>JUNTOS?</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
-                <div class="space-y-6 dyn-muted">
-                    <p class="text-lg leading-relaxed">Tem um projeto em mente? Me manda uma mensagem ou entre em contato direto pelo e-mail. Respondo em até 24h.</p>
-                    <a href="mailto:arthurfestrela@gmail.com" class="block text-xl font-bold underline decoration-1 underline-offset-6 hover:opacity-50 transition" style="color:var(--fg)">
-                        arthurfestrela@gmail.com
+    <main>
+        <!-- ═══════════ HERO ═══════════ -->
+        <section id="hero">
+            <div class="wrap">
+                <p class="eyebrow mono">Full Stack Developer — Bahia, Brasil</p>
+                <h1 class="display">
+                    <span class="line"><span>ARTHUR</span></span>
+                    <span class="line"><span class="outline">ESTRELA</span></span>
+                </h1>
+                <div class="hero-foot">
+                    <p>Construo <strong>produtos SaaS e experiências digitais</strong> que unem estética precisa e performance técnica — do primeiro protótipo ao deploy em produção.</p>
+                    <a href="#work" class="cta">
+                        <span>Ver projetos</span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
                     </a>
-                    <div class="flex gap-6 text-xs font-bold uppercase tracking-[0.25em]">
-                        <a href="https://www.instagram.com/arthurfestrela/"             target="_blank" class="hover:opacity-80 transition dyn-muted">Instagram</a>
-                        <a href="https://www.linkedin.com/in/arthur-estrela-56a571316/" target="_blank" class="hover:opacity-80 transition dyn-muted">LinkedIn</a>
-                        <a href="https://github.com/arthurfestrela"                     target="_blank" class="hover:opacity-80 transition dyn-muted">GitHub</a>
+                </div>
+                <div class="hero-data">
+                    <div class="cell">
+                        <span class="label mono">Base</span>
+                        <span class="value">14.86°S / 40.84°W — BA, BR</span>
+                    </div>
+                    <div class="cell">
+                        <span class="label mono">Hora local</span>
+                        <span class="value" id="hero-clock">--:--:-- GMT-3</span>
+                    </div>
+                    <div class="cell">
+                        <span class="label mono">Status</span>
+                        <span class="value live">DISPONÍVEL PARA PROJETOS</span>
                     </div>
                 </div>
-                <form id="contact-form" onsubmit="sendMessage(event)" class="space-y-8">
-                    <div><input  type="text"  name="name"    placeholder="Seu nome"              class="contact-input" required></div>
-                    <div><input  type="email" name="email"   placeholder="Seu e-mail"            class="contact-input" required></div>
-                    <div><textarea             name="message" placeholder="Fale sobre seu projeto…" class="contact-input" required></textarea></div>
-                    <div><button type="submit" class="send-btn" id="send-btn">Enviar mensagem →</button></div>
-                    <p id="form-feedback" class="text-sm text-green-400 hidden">&#10003; Mensagem enviada! Te respondo em breve.</p>
-                </form>
             </div>
-            <p class="mt-20 text-[10px] uppercase tracking-widest italic dyn-muted">&#169; 2026 Arthur Estrela — Made with minimal code</p>
+        </section>
+
+        <!-- ═══════════ FAIXA ═══════════ -->
+        <div class="band" aria-hidden="true">
+            <div class="band-track" id="band-track"></div>
         </div>
-    </footer>
+
+        <!-- ═══════════ PROJETOS ═══════════ -->
+        <section id="work">
+            <div class="wrap">
+                <div class="section-head reveal">
+                    <span class="sector mono">S.01 — Projetos</span>
+                    <h2 class="display">Trabalhos <span class="outline">selecionados</span></h2>
+                </div>
+
+                <div class="projects">
+
+                    <!-- Horinha -->
+                    <a href="https://github.com/arthurfestrela/Horinha.App" target="_blank" rel="noopener" class="project span-7 reveal">
+                        <span class="glyph">H.</span>
+                        <div class="top">
+                            <span class="idx">P.01</span>
+                            <div class="badges">
+                                <span class="badge hot">Em desenvolvimento</span>
+                                <span class="badge">SaaS</span>
+                            </div>
+                        </div>
+                        <div class="bottom">
+                            <h3>Horinha</h3>
+                            <p class="desc">Plataforma de agendamento + CRM para pequenos negócios de serviço. O cliente agenda sozinho, o dono recebe lembretes automáticos e acompanha o faturamento — sem WhatsApp, sem caderno.</p>
+                            <div class="stack">
+                                <span class="chip">React</span>
+                                <span class="chip">TypeScript</span>
+                                <span class="chip">Node.js</span>
+                                <span class="chip">PostgreSQL</span>
+                                <span class="chip">Prisma</span>
+                            </div>
+                            <div class="links">
+                                <span class="link">Ver no GitHub
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>
+                                </span>
+                                <span class="link soft">horinha.app — em breve</span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Aluguel de Iates -->
+                    <a href="https://github.com/arthurfestrela/Projeto-AluguelIates" target="_blank" rel="noopener" class="project span-5 reveal" style="--d:0.08s">
+                        <span class="glyph">YT</span>
+                        <div class="top">
+                            <span class="idx">P.02</span>
+                            <div class="badges"><span class="badge">Web / UI</span></div>
+                        </div>
+                        <div class="bottom">
+                            <h3>Aluguel de Iates</h3>
+                            <p class="desc">Plataforma de aluguel de iates — UI/UX e desenvolvimento web com foco em experiência premium.</p>
+                            <div class="stack">
+                                <span class="chip">HTML</span>
+                                <span class="chip">CSS</span>
+                                <span class="chip">JavaScript</span>
+                            </div>
+                            <div class="links">
+                                <span class="link">Ver no GitHub
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>
+                                </span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Sensei -->
+                    <a href="https://github.com/raulcabralc/sensei-java" target="_blank" rel="noopener" class="project span-5 reveal">
+                        <span class="glyph">SN</span>
+                        <div class="top">
+                            <span class="idx">P.03</span>
+                            <div class="badges"><span class="badge">Java</span></div>
+                        </div>
+                        <div class="bottom">
+                            <h3>Sensei</h3>
+                            <p class="desc">Sistema full stack em Java com lógica orientada a objetos, construído em colaboração.</p>
+                            <div class="stack">
+                                <span class="chip">Java</span>
+                                <span class="chip">POO</span>
+                            </div>
+                            <div class="links">
+                                <span class="link">Ver no GitHub
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>
+                                </span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Estoquei.ia -->
+                    <div class="project span-7 reveal" style="--d:0.08s">
+                        <span class="glyph">EQ</span>
+                        <div class="top">
+                            <span class="idx">P.04</span>
+                            <div class="badges">
+                                <span class="badge hot">Em desenvolvimento</span>
+                                <span class="badge">SaaS + IA</span>
+                            </div>
+                        </div>
+                        <div class="bottom">
+                            <h3>Estoquei.ia</h3>
+                            <p class="desc">Gestão de estoque inteligente para pequenos comércios: importação de NF-e, movimentações e relatórios — construído com fluxo de desenvolvimento assistido por IA.</p>
+                            <div class="stack">
+                                <span class="chip">Next.js</span>
+                                <span class="chip">TypeScript</span>
+                                <span class="chip">Supabase</span>
+                            </div>
+                            <div class="links">
+                                <span class="link soft">Lançamento em breve</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════ TECH ═══════════ -->
+        <section id="tech">
+            <div class="wrap">
+                <div class="section-head reveal">
+                    <span class="sector mono">S.02 — Stack</span>
+                    <h2 class="display">Tecno<span class="outline">logias</span></h2>
+                </div>
+            </div>
+            <div class="tech-rail"><div class="tech-track" id="tech-row-1"></div></div>
+            <div class="tech-rail"><div class="tech-track reverse" id="tech-row-2"></div></div>
+        </section>
+
+        <!-- ═══════════ IA ═══════════ -->
+        <section id="ai">
+            <div class="wrap">
+                <div class="section-head reveal">
+                    <span class="sector mono">S.03 — Diferencial</span>
+                    <h2 class="display">Engenharia <span class="outline">com IA</span></h2>
+                </div>
+                <p class="lead reveal">Não uso IA como atalho — uso como <em>ferramenta de engenharia</em>. Domino o Claude Code e fluxos de desenvolvimento com agentes, o que me permite entregar em dias o que levaria semanas, sem abrir mão de arquitetura e qualidade de código.</p>
+                <div class="ai-grid">
+                    <div class="ai-card reveal">
+                        <span class="num">/01</span>
+                        <h3>Claude Code no terminal</h3>
+                        <p>Desenvolvimento direto no repositório: refatorações, migrações e features implementadas com revisão de cada mudança antes do commit.</p>
+                        <span class="term"><b>$</b> claude — plan, implement, test, commit</span>
+                    </div>
+                    <div class="ai-card reveal" style="--d:0.08s">
+                        <span class="num">/02</span>
+                        <h3>Agentes &amp; automação</h3>
+                        <p>Fluxos com agentes para tarefas repetitivas — geração de código, testes e integrações — mantendo o controle humano sobre as decisões de produto.</p>
+                        <span class="term"><b>&gt;</b> agentes + MCP + pipelines</span>
+                    </div>
+                    <div class="ai-card reveal" style="--d:0.16s">
+                        <span class="num">/03</span>
+                        <h3>Da ideia ao deploy</h3>
+                        <p>Ciclo completo: validação, protótipo, MVP e produção. Os SaaS deste portfólio nascem e evoluem dentro desse fluxo acelerado.</p>
+                        <span class="term"><b>#</b> prototype → mvp → production</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════ SOBRE ═══════════ -->
+        <section id="about">
+            <div class="wrap">
+                <div class="section-head reveal">
+                    <span class="sector mono">S.04 — Sobre</span>
+                    <h2 class="display">Quem <span class="outline">sou</span></h2>
+                </div>
+                <div class="about-grid">
+                    <p class="statement reveal">Me chamo Arthur Estrela e sou um desenvolvedor focado em criar soluções digitais que unem <span>estética e performance técnica.</span></p>
+                    <div class="about-facts reveal" style="--d:0.1s">
+                        <div class="fact"><span class="k mono">Base</span><span class="v">Bahia, Brasil</span></div>
+                        <div class="fact"><span class="k mono">Foco</span><span class="v">Web · Front-end · Back-end · Branding</span></div>
+                        <div class="fact"><span class="k mono">Atuação</span><span class="v">Freelancer — clientes ao redor do mundo</span></div>
+                        <div class="fact"><span class="k mono">Agora</span><span class="v">Construindo Horinha &amp; Estoquei.ia</span></div>
+                    </div>
+                </div>
+                <div class="pill-rail reveal"><div class="pill-track" id="pill-track"></div></div>
+            </div>
+        </section>
+
+        <!-- ═══════════ CERTIFICADOS ═══════════ -->
+        <section id="certs">
+            <div class="wrap">
+                <div class="section-head reveal">
+                    <span class="sector mono">S.05 — Formação</span>
+                    <h2 class="display">Certifi<span class="outline">cados</span></h2>
+                </div>
+                <div class="certs-grid">
+                    <div class="cert reveal">
+                        <div class="langs">
+                            <span class="lang-tag" style="color:#3572A5">Python</span>
+                            <span class="lang-tag" style="color:#b07219">Java</span>
+                            <span class="lang-tag" style="color:#f34b7d">C / C++</span>
+                            <span class="lang-tag" style="color:#00758f">C#</span>
+                        </div>
+                        <h3>Algoritmos e Lógica de Programação</h3>
+                        <p class="meta">O curso completo — Instrutor: <b>Nelio Alves</b></p>
+                        <div>
+                            <div class="bar-row">
+                                <span class="mono" style="color:var(--faint)">Conclusão</span>
+                                <span class="pct">100%</span>
+                            </div>
+                            <div class="bar"><i></i></div>
+                        </div>
+                        <div class="tags">
+                            <span class="tag">Lógica</span>
+                            <span class="tag">Algoritmos</span>
+                            <span class="tag">Python</span>
+                            <span class="tag">Java</span>
+                            <span class="tag">C++</span>
+                        </div>
+                    </div>
+                    <div class="cert slot reveal" style="--d:0.08s">
+                        <span class="plus">+</span>
+                        <p class="mono">Próximo certificado</p>
+                    </div>
+                    <div class="cert slot reveal" style="--d:0.16s">
+                        <span class="plus">+</span>
+                        <p class="mono">Próximo certificado</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════ CONTATO ═══════════ -->
+        <footer id="contact">
+            <div class="wrap">
+                <div class="status reveal">
+                    <span class="dot"></span>
+                    <span class="mono">Disponível para projetos</span>
+                </div>
+                <h2 class="display giant reveal">Vamos criar<br><span class="alt">juntos?</span></h2>
+                <div class="contact-grid">
+                    <div class="contact-info reveal">
+                        <p>Tem um projeto em mente? Me manda uma mensagem ou entre em contato direto pelo e-mail. Respondo em até 24h.</p>
+                        <a href="mailto:arthurfestrela@gmail.com" class="email-link">arthurfestrela@gmail.com</a>
+                        <div class="socials">
+                            <a href="https://www.instagram.com/arthurfestrela/" target="_blank" rel="noopener">Instagram</a>
+                            <a href="https://www.linkedin.com/in/arthur-estrela-56a571316/" target="_blank" rel="noopener">LinkedIn</a>
+                            <a href="https://github.com/arthurfestrela" target="_blank" rel="noopener">GitHub</a>
+                        </div>
+                    </div>
+                    <form id="contact-form" class="reveal" style="--d:0.1s">
+                        <div class="field">
+                            <input type="text" name="name" id="f-name" placeholder=" " required>
+                            <label for="f-name">Seu nome</label>
+                        </div>
+                        <div class="field">
+                            <input type="email" name="email" id="f-email" placeholder=" " required>
+                            <label for="f-email">Seu e-mail</label>
+                        </div>
+                        <div class="field">
+                            <textarea name="message" id="f-msg" placeholder=" " required></textarea>
+                            <label for="f-msg">Fale sobre seu projeto</label>
+                        </div>
+                        <button type="submit" class="send-btn" id="send-btn"><span>Enviar mensagem</span></button>
+                        <p id="form-feedback">Mensagem enviada — te respondo em breve.</p>
+                    </form>
+                </div>
+                <div class="footer-bottom">
+                    <span class="mono">&copy; 2026 Arthur Estrela</span>
+                    <span class="mono" id="footer-clock">BA, Brasil — --:--:--</span>
+                    <a href="#hero" class="top mono">Voltar ao topo ↑</a>
+                </div>
+            </div>
+        </footer>
+    </main>
 
     <script src="script.js"></script>
 </body>
