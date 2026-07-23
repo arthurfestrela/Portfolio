@@ -1,13 +1,17 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
   <rect width="32" height="32" fill="#0A0A0B" />
   <text
-    x="16"
-    y="24"
+    x="13"
+    y="25"
     text-anchor="middle"
     font-family="Anton, 'Arial Black', 'Helvetica Neue', sans-serif"
     font-weight="900"
-    font-size="24"
+    font-size="20"
     letter-spacing="-0.5"
     fill="#4169E1"
   >A</text>
+  <polygon
+    points="24,4.8 25.06,7.94 28.2,9 25.06,10.06 24,13.2 22.94,10.06 19.8,9 22.94,7.94"
+    fill="#4169E1"
+  />
 </svg>
