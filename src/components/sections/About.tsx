@@ -20,6 +20,7 @@ function Pill({ lang }: { lang: LangPill }) {
 }
 
 export function About() {
+  const headRef = useReveal<HTMLDivElement>()
   const statementRef = useReveal<HTMLParagraphElement>()
   const factsRef = useReveal<HTMLDivElement>()
   const pillRailRef = useReveal<HTMLDivElement>()
@@ -27,7 +28,7 @@ export function About() {
   return (
     <section id="about">
       <div className="wrap">
-        <div className="section-head reveal">
+        <div ref={headRef} className="section-head reveal">
           <span className="sector mono">S.04 — Sobre</span>
           <h2 className="display">
             Quem <span className="outline">sou</span>

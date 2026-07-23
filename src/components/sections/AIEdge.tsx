@@ -36,16 +36,19 @@ const cards: AICardData[] = [
 ]
 
 export function AIEdge() {
+  const headRef = useReveal<HTMLDivElement>()
+  const leadRef = useReveal<HTMLParagraphElement>()
+
   return (
     <section id="ai">
       <div className="wrap">
-        <div className="section-head reveal">
+        <div ref={headRef} className="section-head reveal">
           <span className="sector mono">S.03 — Diferencial</span>
           <h2 className="display">
             Engenharia <span className="outline">com IA</span>
           </h2>
         </div>
-        <p className="lead reveal">
+        <p ref={leadRef} className="lead reveal">
           Não uso IA como atalho — uso como <em>ferramenta de engenharia</em>. Domino o Claude
           Code e fluxos de desenvolvimento com agentes, o que me permite entregar em dias o que
           levaria semanas, sem abrir mão de arquitetura e qualidade de código.

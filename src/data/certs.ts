@@ -6,8 +6,11 @@ export interface CertLang {
 export interface Cert {
   langs: CertLang[]
   title: string
-  instructor: string
+  metaPrefix: string
+  metaLabel: string
+  metaValue: string
   percent: number
+  progressLabel: string
   tags: string[]
 }
 
@@ -20,8 +23,21 @@ export const certs: Cert[] = [
       { name: 'C#', color: '#00758f' },
     ],
     title: 'Algoritmos e Lógica de Programação',
-    instructor: 'Nelio Alves',
+    metaPrefix: 'O curso completo',
+    metaLabel: 'Instrutor',
+    metaValue: 'Nelio Alves',
     percent: 100,
+    progressLabel: 'Conclusão',
     tags: ['Lógica', 'Algoritmos', 'Python', 'Java', 'C++'],
+  },
+  {
+    langs: [],
+    title: 'Sistemas de Informação',
+    metaPrefix: 'Graduação em andamento',
+    metaLabel: 'Instituição',
+    metaValue: 'IFBA — Instituto Federal de Educação, Ciência e Tecnologia da Bahia',
+    percent: 40,
+    progressLabel: 'Em andamento',
+    tags: ['Sistemas de Informação', 'Engenharia de Software', 'Banco de Dados'],
   },
 ]

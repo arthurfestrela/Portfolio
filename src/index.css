@@ -1059,7 +1059,7 @@
     border-radius: 99px;
   }
   .cert.visible .bar i {
-    width: 100%;
+    width: var(--bar-fill, 100%);
   }
   .cert .tags {
     display: flex;
@@ -1095,6 +1095,91 @@
   }
   @media (max-width: 900px) {
     .certs-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ── Leituras ── */
+  .reads-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 20px;
+    margin: clamp(56px, 7vw, 90px) 0 28px;
+    padding-top: clamp(40px, 6vw, 64px);
+    border-top: 1px dashed var(--line);
+  }
+  .reads-head .sector {
+    color: var(--accent-text);
+  }
+  .reads-head h3 {
+    @apply font-display;
+    text-transform: uppercase;
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
+  }
+
+  .books-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
+  .book {
+    border: 1px solid var(--line);
+    border-radius: 22px;
+    background: var(--card);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    transition: border-color 0.4s, background 0.4s, transform 0.5s var(--ease-out);
+  }
+  .book:hover {
+    border-color: var(--line-strong);
+    background: var(--card-hover);
+    transform: translateY(-6px);
+  }
+  .book-cover {
+    width: 100%;
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+    border-radius: 12px;
+    background: var(--card-hover);
+  }
+  .book h3 {
+    @apply font-display;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    line-height: 1.15;
+  }
+  .book .meta {
+    color: var(--muted);
+    font-size: 0.85rem;
+  }
+  .book .meta b {
+    color: var(--fg);
+    font-weight: 700;
+  }
+  .book .link {
+    margin-top: auto;
+    @apply font-mono;
+    font-size: 0.64rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--fg);
+  }
+  .book .link svg {
+    width: 12px;
+    height: 12px;
+    transition: transform 0.3s var(--ease-out);
+  }
+  .book:hover .link svg {
+    transform: translate(3px, -3px);
+  }
+  @media (max-width: 900px) {
+    .books-grid {
       grid-template-columns: 1fr;
     }
   }

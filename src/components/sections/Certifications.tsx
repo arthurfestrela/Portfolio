@@ -1,12 +1,16 @@
 import type { CSSProperties } from 'react'
 import { certs, type Cert } from '@/data/certs'
+import { books, type Book } from '@/data/books'
 import { useReveal } from '@/hooks/useReveal'
 
 export function Certifications() {
+  const headRef = useReveal<HTMLDivElement>()
+  const readsHeadRef = useReveal<HTMLDivElement>()
+
   return (
     <section id="certs">
       <div className="wrap">
-        <div className="section-head reveal">
+        <div ref={headRef} className="section-head reveal">
           <span className="sector mono">S.05 — Formação</span>
           <h2 className="display">
             Certifi<span className="outline">cados</span>
@@ -17,7 +21,16 @@ export function Certifications() {
             <CertCard key={cert.title} cert={cert} />
           ))}
           <CertSlot delay="0.08s" />
-          <CertSlot delay="0.16s" />
+        </div>
+
+        <div ref={readsHeadRef} className="reads-head reveal">
+          <span className="sector mono">Leituras</span>
+          <h3>Livros lidos</h3>
+        </div>
+        <div className="books-grid">
+          {books.map((book, i) => (
+            <BookCard key={book.title} book={book} delay={i > 0 ? `${i * 0.08}s` : undefined} />
+          ))}
         </div>
       </div>
     </section>
@@ -37,17 +50,17 @@ function CertCard({ cert }: { cert: Cert }) {
       </div>
       <h3>{cert.title}</h3>
       <p className="meta">
-        O curso completo — Instrutor: <b>{cert.instructor}</b>
+        {cert.metaPrefix} — {cert.metaLabel}: <b>{cert.metaValue}</b>
       </p>
       <div>
         <div className="bar-row">
           <span className="mono" style={{ color: 'var(--faint)' }}>
-            Conclusão
+            {cert.progressLabel}
           </span>
           <span className="pct">{cert.percent}%</span>
         </div>
         <div className="bar">
-          <i />
+          <i style={{ '--bar-fill': `${cert.percent}%` } as CSSProperties} />
         </div>
       </div>
       <div className="tags">
@@ -72,5 +85,45 @@ function CertSlot({ delay }: { delay?: string }) {
       <span className="plus">+</span>
       <p className="mono">Próximo certificado</p>
     </div>
+  )
+}
+
+function BookCard({ book, delay }: { book: Book; delay?: string }) {
+  const ref = useReveal<HTMLAnchorElement>()
+  return (
+    <a
+      ref={ref}
+      href={book.href}
+      target="_blank"
+      rel="noopener"
+      className="book reveal"
+      style={delay ? ({ '--d': delay } as CSSProperties) : undefined}
+    >
+      <img
+        className="book-cover"
+        src={book.cover}
+        alt={`Capa do livro ${book.title}`}
+        loading="lazy"
+        width={400}
+        height={600}
+      />
+      <h3>{book.title}</h3>
+      <p className="meta">
+        {book.author} — <b>{book.publisher}</b>
+      </p>
+      <span className="link">
+        Ver na Novatec
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={2.4}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M7 17L17 7M9 7h8v8" />
+        </svg>
+      </span>
+    </a>
   )
 }

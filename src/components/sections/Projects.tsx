@@ -2,17 +2,19 @@ import type { ElementType, CSSProperties } from 'react'
 import { projects, type Project } from '@/data/projects'
 import { useReducedMotion } from '@/hooks/useReducedMotion'
 import { useProjectCard } from '@/hooks/useProjectCard'
+import { useReveal } from '@/hooks/useReveal'
 
 // 21st.dev: candidato para cards de projeto prontos (ex.: "Project Card" / "Bento Grid").
 // Se substituir, mantenha `src/data/projects.ts` como fonte dos dados — é o único
 // lugar que precisa mudar ao adicionar/remover um projeto.
 export function Projects() {
   const reducedMotion = useReducedMotion()
+  const headRef = useReveal<HTMLDivElement>()
 
   return (
     <section id="work">
       <div className="wrap">
-        <div className="section-head reveal">
+        <div ref={headRef} className="section-head reveal">
           <span className="sector mono">S.01 — Projetos</span>
           <h2 className="display">
             Trabalhos <span className="outline">selecionados</span>

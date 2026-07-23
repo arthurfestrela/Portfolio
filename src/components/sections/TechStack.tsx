@@ -1,5 +1,6 @@
 import { Marquee } from '@/components/Marquee'
 import { techs, type Tech } from '@/data/techs'
+import { useReveal } from '@/hooks/useReveal'
 
 function TechCard({ tech }: { tech: Tech }) {
   return (
@@ -19,11 +20,12 @@ function TechCard({ tech }: { tech: Tech }) {
 
 export function TechStack() {
   const reversed = [...techs].reverse()
+  const headRef = useReveal<HTMLDivElement>()
 
   return (
     <section id="tech">
       <div className="wrap">
-        <div className="section-head reveal">
+        <div ref={headRef} className="section-head reveal">
           <span className="sector mono">S.02 — Stack</span>
           <h2 className="display">
             Tecno<span className="outline">logias</span>
