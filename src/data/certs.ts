@@ -12,6 +12,7 @@ export interface Cert {
   percent: number
   progressLabel: string
   tags: string[]
+  href?: string
 }
 
 export const certs: Cert[] = [
@@ -39,5 +40,16 @@ export const certs: Cert[] = [
     percent: 40,
     progressLabel: 'Em andamento',
     tags: ['Sistemas de Informação', 'Engenharia de Software', 'Banco de Dados'],
+  },
+  {
+    langs: [],
+    title: 'Introduction to Front-End Development',
+    metaPrefix: 'O curso completo',
+    metaLabel: 'Instituição',
+    metaValue: 'Meta (via Coursera)',
+    percent: 100,
+    progressLabel: 'Conclusão',
+    tags: ['HTML', 'CSS', 'Front-End Development'],
+    href: 'https://coursera.org/share/346b78fd77eb1eeaf8f14917b1451d72',
   },
 ]

@@ -1,4 +1,4 @@
-import type { CSSProperties } from 'react'
+import type { CSSProperties, ElementType } from 'react'
 import { certs, type Cert } from '@/data/certs'
 import { books, type Book } from '@/data/books'
 import { useReveal } from '@/hooks/useReveal'
@@ -20,7 +20,6 @@ export function Certifications() {
           {certs.map((cert) => (
             <CertCard key={cert.title} cert={cert} />
           ))}
-          <CertSlot delay="0.08s" />
         </div>
 
         <div ref={readsHeadRef} className="reads-head reveal">
@@ -38,9 +37,15 @@ export function Certifications() {
 }
 
 function CertCard({ cert }: { cert: Cert }) {
-  const ref = useReveal<HTMLDivElement>()
+  const ref = useReveal<HTMLElement>()
+  const Tag = (cert.href ? 'a' : 'div') as ElementType
+
   return (
-    <div ref={ref} className="cert reveal">
+    <Tag
+      ref={ref}
+      {...(cert.href ? { href: cert.href, target: '_blank', rel: 'noopener' } : {})}
+      className="cert reveal"
+    >
       <div className="langs">
         {cert.langs.map((lang) => (
           <span key={lang.name} className="lang-tag" style={{ color: lang.color }}>
@@ -70,21 +75,22 @@ function CertCard({ cert }: { cert: Cert }) {
           </span>
         ))}
       </div>
-    </div>
-  )
-}
-
-function CertSlot({ delay }: { delay?: string }) {
-  const ref = useReveal<HTMLDivElement>()
-  return (
-    <div
-      ref={ref}
-      className="cert slot reveal"
-      style={delay ? ({ '--d': delay } as CSSProperties) : undefined}
-    >
-      <span className="plus">+</span>
-      <p className="mono">Próximo certificado</p>
-    </div>
+      {cert.href && (
+        <span className="link">
+          Ver certificado
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2.4}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M7 17L17 7M9 7h8v8" />
+          </svg>
+        </span>
+      )}
+    </Tag>
   )
 }
 

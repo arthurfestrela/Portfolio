@@ -127,7 +127,6 @@
   --animate-marquee: marquee 22s linear infinite;
   --animate-marquee-slow: marquee 34s linear infinite;
   --animate-marquee-slower: marquee 40s linear infinite reverse;
-  --animate-marquee-pill: marquee 28s linear infinite;
   --animate-bootFill: bootFill 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
   --animate-pulseDot: pulseDot 2.2s ease-in-out infinite;
 }
@@ -447,7 +446,6 @@
   #hero h1 .line:nth-child(2) > span {
     transition-delay: 0.1s;
   }
-
   #hero .hero-foot {
     display: flex;
     flex-wrap: wrap;
@@ -943,45 +941,6 @@
     }
   }
 
-  .pill-rail {
-    overflow: hidden;
-    mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
-    -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
-  }
-  .pill-track {
-    display: flex;
-    width: max-content;
-    @apply animate-marquee-pill;
-  }
-  .pill-rail:hover .pill-track {
-    animation-play-state: paused;
-  }
-  .pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 9px;
-    padding: 11px 24px;
-    margin: 0 7px;
-    border: 1px solid var(--line);
-    border-radius: 999px;
-    @apply font-mono;
-    font-size: 0.64rem;
-    font-weight: 500;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    white-space: nowrap;
-    transition: border-color 0.3s;
-  }
-  .pill:hover {
-    border-color: var(--line-strong);
-  }
-  .pill i {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-
   /* ── Certificados ── */
   #certs {
     padding: clamp(90px, 12vh, 150px) 0;
@@ -1076,6 +1035,24 @@
     border: 1px solid var(--line);
     border-radius: 999px;
     color: var(--muted);
+  }
+  .cert .link {
+    @apply font-mono;
+    font-size: 0.64rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--fg);
+  }
+  .cert .link svg {
+    width: 12px;
+    height: 12px;
+    transition: transform 0.3s var(--ease-out);
+  }
+  .cert:hover .link svg {
+    transform: translate(3px, -3px);
   }
   .cert.slot {
     align-items: center;

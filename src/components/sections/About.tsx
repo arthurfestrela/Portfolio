@@ -1,6 +1,4 @@
 import type { CSSProperties } from 'react'
-import { Marquee } from '@/components/Marquee'
-import { langs, type LangPill } from '@/data/langs'
 import { useReveal } from '@/hooks/useReveal'
 
 const FACTS = [
@@ -10,20 +8,10 @@ const FACTS = [
   { k: 'Agora', v: 'Construindo Horinha & Estoquei.ia' },
 ]
 
-function Pill({ lang }: { lang: LangPill }) {
-  return (
-    <span className="pill">
-      <i style={{ background: lang.color }} />
-      {lang.name}
-    </span>
-  )
-}
-
 export function About() {
   const headRef = useReveal<HTMLDivElement>()
   const statementRef = useReveal<HTMLParagraphElement>()
   const factsRef = useReveal<HTMLDivElement>()
-  const pillRailRef = useReveal<HTMLDivElement>()
 
   return (
     <section id="about">
@@ -47,13 +35,6 @@ export function About() {
               </div>
             ))}
           </div>
-        </div>
-        <div ref={pillRailRef} className="pill-rail reveal">
-          <Marquee
-            trackClassName="pill-track"
-            items={langs}
-            renderItem={(lang, key) => <Pill key={key} lang={lang} />}
-          />
         </div>
       </div>
     </section>
