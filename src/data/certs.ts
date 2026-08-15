@@ -43,6 +43,17 @@ export const certs: Cert[] = [
   },
   {
     langs: [],
+    title: 'AI Fundamentals',
+    metaPrefix: 'O curso completo',
+    metaLabel: 'Instituição',
+    metaValue: 'Google (via Coursera)',
+    percent: 100,
+    progressLabel: 'Conclusão',
+    tags: ['Inteligência Artificial', 'IA', 'Fundamentos'],
+    href: 'https://coursera.org/share/a3c372f2d75fbf0d21a025eb14af9ea6',
+  },
+  {
+    langs: [],
     title: 'Introduction to Front-End Development',
     metaPrefix: 'O curso completo',
     metaLabel: 'Instituição',
